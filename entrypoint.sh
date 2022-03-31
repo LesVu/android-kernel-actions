@@ -191,6 +191,10 @@ if [[ $arch = "arm64" ]]; then
       err "Failed downloading toolchain, refer to the README for details"
       exit 1
     fi
+    if ! apt install -y --no-install-recommends gcc; then
+      err "AOSP gcc fail with apt install gcc"
+      exit 1
+    fi
     export PATH="/aarch64-linux-android-4.9/bin:$PATH"
     export CROSS_COMPILE="aarch64-linux-android-"
   else
