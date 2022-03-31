@@ -91,6 +91,10 @@ If you want to compile with Clang and LLVM without any of GNU's binutils, make s
 - `aosp-clang/<branch>/<clang version>`, `aosp-clang/<branch>/<clang version>/binutils`
 > Example : `aosp-clang/master/clang-r416183b`, `aosp-clang/android11-release/clang-r365631c/binutils`
 
+#### AOSP's GCC
+
+- `aosp-gcc`
+
 ## Example usage
 
 ### With [`ncipollo/release-action`](https://github.com/ncipollo/release-action)
