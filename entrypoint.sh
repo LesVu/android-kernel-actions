@@ -52,7 +52,7 @@ if [[ $arch = "arm64" ]]; then
     host_make_opts=""
 
     if ! apt install -y --no-install-recommends gcc-"$ver_number" g++-"$ver_number" \
-      gcc-"$ver_number"-aarch64-linux-gnu gcc-"$ver_number"-arm-linux-gnueabi; then
+      gcc-"$ver_number"-aarch64-linux-gnu gcc-"$ver_number"-arm-linux-gnueabihf gcc-"$ver_number"-arm-linux-gnueabi; then
       err "Compiler package not found, refer to the README for details"
       exit 1
     fi
@@ -60,23 +60,24 @@ if [[ $arch = "arm64" ]]; then
     ln -sf /usr/bin/gcc-"$ver_number" /usr/bin/gcc
     ln -sf /usr/bin/g++-"$ver_number" /usr/bin/g++
     ln -sf /usr/bin/aarch64-linux-gnu-gcc-"$ver_number" /usr/bin/aarch64-linux-gnu-gcc
+    ln -sf /usr/bin/arm-linux-gnueabihf-gcc-"$ver_number" /usr/bin/arm-linux-gnueabihf-gcc
     ln -sf /usr/bin/arm-linux-gnueabi-gcc-"$ver_number" /usr/bin/arm-linux-gnueabi-gcc
 
     export CROSS_COMPILE="aarch64-linux-gnu-"
-    export CROSS_COMPILE_ARM32="arm-linux-gnueabi-"
+    export CROSS_COMPILE_ARM32="arm-linux-gnueabihf-"
   elif [[ $compiler = clang/* ]]; then
     ver="${compiler/clang\//}"
     ver_number="${ver/\/binutils/}"
     binutils="$([[ $ver = */binutils ]] && echo true || echo false)"
 
     if $binutils; then
-      additional_packages="binutils binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi"
+      additional_packages="binutils binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi binutils-arm-linux-gnueabihf"
       make_opts="CC=clang"
       host_make_opts="HOSTCC=clang HOSTCXX=clang++"
     else
       # Most android kernels still need binutils as the assembler, but it will
       # not be used when the Makefile is patched to make use of LLVM_IAS option
-      additional_packages="binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi"
+      additional_packages="binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi binutils-arm-linux-gnueabihf"
       make_opts="CC=clang LD=ld.lld NM=llvm-nm AR=llvm-ar STRIP=llvm-strip OBJCOPY=llvm-objcopy"
       make_opts+=" OBJDUMP=llvm-objdump READELF=llvm-readelf LLVM_IAS=1"
       host_make_opts="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld HOSTAR=llvm-ar"
@@ -98,7 +99,7 @@ if [[ $arch = "arm64" ]]; then
 
     export CLANG_TRIPLE="aarch64-linux-gnu-"
     export CROSS_COMPILE="aarch64-linux-gnu-"
-    export CROSS_COMPILE_ARM32="arm-linux-gnueabi-"
+    export CROSS_COMPILE_ARM32="arm-linux-gnueabihf-"
   elif [[ $compiler = proton-clang/* ]]; then
     ver="${compiler/proton-clang\//}"
     ver_number="${ver/\/binutils/}"
