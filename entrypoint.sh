@@ -205,8 +205,7 @@ fi
 msg "::endgroup::"
 
 cd "$workdir"/"$kernel_path" || exit 127
-start_time="$(date +%s)"
-date="$(date +%d%m%Y-%I%M)"
+start_time="$(date +%s)"s
 tag="$(git branch | sed 's/*\ //g')"
 echo "branch/tag: $tag"
 echo "make options:" $arch_opts $make_opts $host_make_opts
