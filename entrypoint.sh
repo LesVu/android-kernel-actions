@@ -210,16 +210,16 @@ tag="$(git branch | sed 's/*\ //g')"
 echo "branch/tag: $tag"
 echo "make options:" "$arch_opts" "$make_opts" "$host_make_opts"
 msg "::group::Generating defconfig from make $defconfig..."
-if ! make O=out "$arch_opts" "$make_opts" "$host_make_opts" "$defconfig"; then
+if ! make O=out $arch_opts $make_opts $host_make_opts "$defconfig"; then
     err "Failed generating .config, make sure it is actually available in arch/${arch}/configs/ and is a valid defconfig file"
     exit 2
 fi
 msg "::endgroup::"
 msg "::group::Begin building kernel..."
 
-make O=out "$arch_opts" "$make_opts" "$host_make_opts" -j"$(nproc --all)" prepare
+make O=out $arch_opts $make_opts $host_make_opts -j"$(nproc --all)" prepare
 
-if ! make O=out "$arch_opts" "$make_opts" "$host_make_opts" -j"$(nproc --all)"; then
+if ! make O=out $arch_opts $make_opts $host_make_opts -j"$(nproc --all)"; then
     err "Failed building kernel, probably the toolchain is not compatible with the kernel, or kernel source problem"
     exit 3
 fi
@@ -227,7 +227,7 @@ msg "::endgroup::"
 
 if [[ $dtbo_val != 0 ]]; then
     msg "Making dtbo.img using pagesize $dtbo_val"
-    /libufdt/utils/src/mkdtboimg.py create dtbo.img --page_size="$dtbo_val" "$(find out/arch/"$arch"/boot/dts -type f -name "*.dtbo" | sort)"
+    /libufdt/utils/src/mkdtboimg.py create dtbo.img --page_size=$dtbo_val "$(find out/arch/$arch/boot/dts -type f -name "*.dtbo" | sort)"
 fi
 
 set_output elapsed_time "$(echo "$(date +%s)"-"$start_time" | bc)"
