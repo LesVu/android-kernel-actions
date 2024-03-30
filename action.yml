@@ -17,6 +17,10 @@ inputs:
   image:
     description: Kernel image name
     required: true
+  dtbo:
+    description: Pagesize to build dtbo.img
+    required: false
+    default: 0
 outputs:
   outfile:
     description: Zip file generated from build
@@ -28,3 +32,4 @@ runs:
     - ${{ inputs.compiler }}
     - ${{ inputs.defconfig }}
     - ${{ inputs.image }}
+    - ${{ inputs.dtbo }}

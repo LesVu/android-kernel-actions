@@ -1,5 +1,5 @@
 # Android Kernel Actions
-[![Shell check](https://github.com/lemniskett/android-kernel-actions/actions/workflows/check.yml/badge.svg)](https://github.com/lemniskett/android-kernel-actions/actions/workflows/check.yml)
+[![Shell check](https://github.com/LesVu/android-kernel-actions/actions/workflows/check.yml/badge.svg)](https://github.com/LesVu/android-kernel-actions/actions/workflows/check.yml)
 
 Builds Android kernel from the kernel repository.
 > Note: You don't have to fork this repository, see the [examples](#example-usage).
@@ -14,6 +14,7 @@ Builds Android kernel from the kernel repository.
 | `compiler` | Specify which toochain to use |
 | `defconfig` | Specify what defconfig command used to generate `.config` file |
 | `image` | Specify what is the final build file, usually it's `Image.gz-dtb` or `Image-dtb` |
+| `dtbo` | Pagesize used to build dtbo.img(default is `0` which is disable building dtbo)(aosp-clang only) |
 
 ### Environment Variables
 
@@ -21,7 +22,6 @@ Builds Android kernel from the kernel repository.
 | --- | --- |
 | `NAME` | Specify the name of the release file, defaults to the name of the repository |
 | `KERNEL_PATH` | Specify the path of the kernel source, defaults to `.` |
-| `ZIPPER_PATH` | Specify the path of the zip template, defaults to `zipper` |
 | `PYTHON_VERSION` | Specify the version of Python to use, either `3`, or `2`. defaults to `3` |
 
 ### Outputs
@@ -31,10 +31,6 @@ Builds Android kernel from the kernel repository.
 | `elapsed_time` | Time elapsed from building the kernel in seconds, excluding zipping and downloading toolchains |
 | `outfile` | Path to the final build file |
 | `hash` | Kernel commit hash |
-
-## AnyKernel3
-
-Put the AnyKernel3 template to `zipper`. Providing AnyKernel3 template is optional, the `outfile` output varies based on this. If AnyKernel3 template is provided, this Action will create a flashable zip file based on the AnyKernel3 template and the `outfile` output will be the path to the zipfile. if not the `outfile` will be the path to the kernel image. See the [examples](#example-usage).
 
 ## Getting the build
 
@@ -110,19 +106,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout kernel source
-      uses: actions/checkout@v2
-
-    - name: Checkout zipper
-      uses: actions/checkout@v2
-      with:
-        repository: lemniskett/AnyKernel3
-        path: zipper
+      uses: actions/checkout@v4
 
     - name: Android kernel build
-      uses: lemniskett/android-kernel-actions@master
+      uses: LesVu/android-kernel-actions@master
       id: build
-      env:
-        NAME: Dark-Ages-Último
       with:
         arch: arm64
         compiler: gcc/10
@@ -149,19 +137,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout kernel source
-      uses: actions/checkout@v2
-
-    - name: Checkout zipper
-      uses: actions/checkout@v2
-      with:
-        repository: lemniskett/AnyKernel3
-        path: zipper
+      uses: actions/checkout@v4
 
     - name: Android kernel build
-      uses: lemniskett/android-kernel-actions@master
+      uses: LesVu/android-kernel-actions@master
       id: build
-      env:
-        NAME: Dark-Ages-Último
       with:
         arch: arm64
         compiler: gcc/10
